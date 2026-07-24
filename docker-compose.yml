@@ -1,0 +1,35 @@
+services:
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "3080:80"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+    depends_on:
+      - frontend
+      - pocketbase
+    restart: unless-stopped
+
+  pocketbase:
+    build: ./pocketbase
+    environment:
+      PB_ADMIN_EMAIL: ${PB_ADMIN_EMAIL}
+      PB_ADMIN_PASSWORD: ${PB_ADMIN_PASSWORD}
+    volumes:
+      - pb_data:/pb/data
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_POCKETBASE_URL: http://pocketbase:8090
+    environment:
+      NEXT_PUBLIC_POCKETBASE_URL: http://pocketbase:8090
+    depends_on:
+      - pocketbase
+    restart: unless-stopped
+
+volumes:
+  pb_data:
+    driver: local

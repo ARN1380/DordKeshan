@@ -1,0 +1,14 @@
+node_modules/
+.next/
+.env
+.env.local
+.env*.local
+.playwright-mcp/
+nul
+*.log
+.DS_Store
+temp-audio/
+frontend/.next/
+frontend/node_modules/
+pocketbase/pb_data/
+pocketbase/pb_migrations/
